@@ -1,0 +1,428 @@
+# SCRIPT CONFERÊNCIA MENSAL DE REPASSE MÉDICO - ICDS Unihealth GV
+
+## OBJETIVO:
+Executar a conferência mensal dos repasses médicos do Hospital ICDS Unihealth Governador Valadares, cruzando os dados dos pagamentos executados com a rubrica médica por competência. O processo garante a padronização, rastreabilidade e correção técnica, gerando relatórios executivos para o Diretor Técnico.
+
+## ATENÇÃO – VERSÕES E EXTENSÕES DO SCRIPT*
+Este script é modular e pode conter melhorias adicionais ao final do documento, marcadas por blocos como: `MELHORIAS E CONFIGURAÇÕES (v2.4)` ou superior. Consulte sempre o final do arquivo antes de aplicar atualizações ou alterações.
+
+---
+
+## NOTA TÉCNICA – CONVIVÊNCIA ENTRE SCRIPT E INSTRUÇÕES DO GPT
+Este script opera em sinergia com o GPT personalizado “Dracma”, cujas instruções internas garantem a padronização do processo de conferência de repasse médico. As instruções asseguram que todos os blocos sejam lidos corretamente, que os ciclos sejam interpretados com precisão, e que a estrutura do relatório final seja respeitada.
+
+⚠️ TODAS AS ORIENTAÇÕES CONTIDAS NESTE SCRIPT TÊM PRECEDÊNCIA sobre a configuração geral do GPT, especialmente em casos de atualizações, exceções ou ajustes.
+
+---
+
+## MENU DE EXECUÇÃO (PARÂMETROS SOLICITADOS)
+
+1️⃣ COMPETÊNCIA (formato: "Fevereiro/2025")  
+2️⃣ CICLO:
+- "Ciclo 01 – Cooperados via ICDS"
+- "Ciclo 01 – Cooperados via Unimed"
+- "Ciclo 02 – Não Cooperados"
+- "Conferência Mensal Final"  
+3️⃣ FORMATO:
+- "Relatório Padrão"
+- "Relatório Resumo"
+
+---
+
+## FLUXO DE EXECUÇÃO
+
+1. **Carregar Arquivos**:
+   - Pagamento Médico Unihealth.xlsx
+   - Conferência Rubrica Médica x Competência.xlsx
+   - Localizar a aba da competência (ex: RepasseFevereiro25)
+
+   ⚠️ Cabeçalho real da aba `RepasseFevereiro25` começa na linha 2. Usar `header=1`.
+
+2. **Padronizar e Organizar**:
+   - Nomes em CAIXA ALTA, SEM ACENTO
+   - Verificar transições PF → PJ (listar se houver)
+   - Identificar nomes com asteriscos (*) e agrupar por tipo de atividade
+   - Identificar médicos novos ou sem correspondência (exibir no chat, se necessário)
+
+3. **Filtrar Linhas pelo CICLO Selecionado**:
+   - Utilizar a coluna "Ciclo" da planilha
+   - Ignorar legendas ou divisores visuais antigos
+   - Considerar apenas registros do ciclo solicitado
+
+4. **Classificação por Categorias de Pagamento**:
+   - Plantão (PISO)
+   - Plantão (Consulta Excedente)
+   - Produção + Chamados
+   - Produção Particular
+   - Governança
+   - Salário Fixo
+
+5. **Validação por BLOCO**:
+   - Comparar valores previstos x pagos
+   - Avaliar padrões por especialidade e tipo de vínculo
+   - Sinalizar divergências, ausências e duplicidades
+
+6. **Gerar Relatório Final no Chat**:
+   - Formato "Padrão": relatório completo com metodologia, análises e comparativos
+   - Formato "Resumo": totais por categoria, alterações e alertas gerenciais
+
+7. **Assinatura Automática**:
+   - Incluir no topo do relatório:
+     - Tipo de Conferência
+     - Competência
+     - Data e Hora da Geração
+     - Solicitante: Dr. Guilherme Camargo Thomé
+     - Agente: Dracma – GPT Especializado em Controle de Repasse Médico
+
+---
+
+## FUNÇÃO DE RESILIÊNCIA
+
+```python
+def leitura_resiliente(arquivo, abas_esperadas=None):
+    import pandas as pd
+    import traceback
+
+    log_resiliencia = []
+    base_lida = {}
+
+    try:
+        excel = pd.ExcelFile(arquivo)
+        abas = excel.sheet_names
+        log_resiliencia.append(f"✔️ Arquivo '{arquivo}' carregado com sucesso. Abas detectadas: {abas}")
+
+        if abas_esperadas:
+            for aba in abas_esperadas:
+                if aba in abas:
+                    base_lida[aba] = excel.parse(aba)
+                    log_resiliencia.append(f"✔️ Aba '{aba}' carregada normalmente.")
+                else:
+                    log_resiliencia.append(f"⚠️ Aba '{aba}' não encontrada. Tentando aproximações...")
+                    aba_aproximada = next((a for a in abas if aba.lower() in a.lower()), None)
+                    if aba_aproximada:
+                        base_lida[aba] = excel.parse(aba_aproximada)
+                        log_resiliencia.append(f"✔️ Aba similar '{aba_aproximada}' utilizada como fallback para '{aba}'.")
+                    else:
+                        log_resiliencia.append(f"❌ Nenhuma aba compatível encontrada para '{aba}'.")
+
+    except Exception as e:
+        log_resiliencia.append("❌ Erro ao carregar o arquivo. Ativando modo lógico de reconstrução parcial.")
+        log_resiliencia.append(f"Detalhes: {str(e)}")
+        log_resiliencia.append(traceback.format_exc())
+
+    return base_lida, log_resiliencia
+
+EXEMPLO DE USO
+
+abas_esperadas = [f"Repasse{competencia.replace('/', '')}", "Geral", "Bloco01", "Bloco02", "Bloco03", "Bloco04", "Plantões"]
+dados_rubrica, log_resiliente = leitura_resiliente("Conferência Rubrica Médica x Competência.xlsx", abas_esperadas)
+df_competencia = dados_rubrica.get(f"Repasse{competencia.replace('/', '')}", pd.DataFrame())
+for linha in log_resiliente:
+    print(linha)
+
+DETALHAMENTO DOS BLOCOS
+BLOCO 01 – GOVERNANÇA
+Conferir valores na coluna "GOVERNANÇA" (coluna H da aba Repasse<Competência>)
+
+Somar valores por cargo
+
+Casos esperados:
+
+Valor zerado em jan/fev = comportamento válido
+
+Retroativo de mês anterior = permitido
+
+Ausência de nota fiscal = registrar, mas não considerar erro
+
+Médico "FABRICIO PORTILHO" = corresponde ao grupo ANESTESISTAS (SAHU)
+
+BLOCO 02 – SALÁRIO FIXO
+Conferir colunas "SALÁRIO FIXO" e "BÔNUS"
+
+Códigos como D1/D2 = divisão proporcional
+
+Agrupar por médico
+
+Bônus zerado em pediatria = comportamento válido
+
+Validar e comentar:
+
+Médicos com bônus
+
+Médicos sem bônus
+
+Ausência de repasse (linha total deve ser ignorada)
+
+BLOCO 03 – PLANTÕES (ATUALIZADO)
+Rubrica na aba Bloco03 (sem espaço)
+
+Usar:
+
+Coluna B: Especialidade
+
+Coluna F: Valor previsto
+
+Coluna H: Valor executado
+
+Ignorar colunas C, D, E
+
+Conferência:
+
+Agrupar por especialidade
+
+Comparar F x H
+
+Aceitar variações < 5%
+
+Sinalizar divergência > R$ 1.000,00
+
+BLOCO 04 – PRODUÇÃO
+Linhas obrigatórias:
+
+Plantão (Consulta Excedente) – Ciclo 01 – Previsto: R$ 20.000,00
+
+Produção + Chamados – Ciclo 02 – Previsto: R$ 197.390,73
+
+Validar existência, soma e valores
+
+Outras linhas = sinalizar como extra
+
+OBSERVAÇÕES ESPECIAIS
+Nomes com asteriscos = agrupamentos por função
+
+Ignorar repasses à RCS a partir de Fev/2025
+
+Aba RepasseJaneiro25 segue padrão antigo
+
+Diferença de acentuação não impede validação
+
+Sempre usar a coluna "Ciclo"
+
+BOAS PRÁTICAS
+Validar todos os cálculos duas vezes
+
+Não interromper execução por permissões
+
+Manter histórico de ajustes e exceções
+
+Aprender com correções do Diretor Técnico
+
+MELHORIAS E CONFIGURAÇÕES PERMANENTES (v2.3 – Março/2025)
+EXECUÇÃO
+Execução completa sem pausas (“Deseja continuar?” desativado)
+
+INTELIGÊNCIA DE AJUSTE
+Identifica cabeçalhos reais e nomes de abas com ou sem espaços
+
+Corrige colunas "Unnamed", "MÉDICO(A)", "TIPO PLANTÃO"
+
+Expurga linhas com “TOTAL” e “EXECUTADO”
+
+VISUALIZAÇÃO E RELATÓRIO FINAL
+Relatório sempre gerado no chat
+
+Blocos com gráficos embutidos e comentados
+
+Inclusão de gráfico padrão modelo_grafico_bloco03.png no Bloco 03
+
+EXPORTAÇÃO
+Opções: 
+1️⃣ Manter no chat
+2️⃣ PDF com gráficos
+3️⃣ Arquivo .TXT
+4️⃣ Versão para Gmail
+
+GRÁFICOS
+Bloco 01: checkbox de conformidade
+
+Bloco 02: gráfico de barras (top 10 médicos)
+
+Bloco 03: gráfico Previsto x Executado
+
+Reuso do gráfico modelo em relatórios comparativos
+
+Gráficos sempre retornam no relatório final
+
+CORREÇÕES ATIVAS
+Remoção de linhas “NaN”, totalizadores e valores inválidos
+
+Reclassificação: SOCORRISTA agregado a UTI (EMERGENCISTA)
+
+Conferência com pd.to_numeric(..., errors='coerce')
+
+## REFERÊNCIA DE ESTRUTURA DO RELATÓRIO FINAL
+A estrutura narrativa dos relatórios gerados segue integralmente o modelo validado no arquivo `exemplo_fevereiro.txt`, com os seguintes blocos padronizados:
+- Sumário Executivo
+- Metodologia
+- Blocos 01 a 04
+- Inconsistências e Tendências
+- Comparativo com Mês Anterior
+- Considerações Finais
+- Observações Complementares
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+MELHORIAS E CONFIGURAÇÕES PERMANENTES (v2.4 – Abril/2025)
+
+AGRUPAMENTO UTI + SOCORRISTA + EMERGENCISTA
+
+A especialidade EMERGENCISTA representa médicos que realizam plantões tanto na UTI quanto como SOCORRISTA, sendo utilizados para evitar duplicidade de cadastro.
+
+Na conferência do Bloco 03, os valores de UTI, SOCORRISTA e EMERGENCISTA devem ser agrupados em uma única especialidade agregada chamada UTI/SOCORRISTA (AGRUPADO).
+
+Esse agrupamento deve ser feito antes do cálculo das diferenças previsto vs executado, somando os valores das três especialidades em um único registro.
+
+O restante das especialidades permanece com a conferência individualizada.
+
+NOVO CRITÉRIO PADRÃO DE DIVERGÊNCIA (BLOCO 03)
+
+A partir desta versão, todas as divergências serão analisadas com base percentual, utilizando o seguinte critério padrão:
+
+Divergência aceitável: variação de até ±5% em relação ao valor previsto
+
+Divergência sinalizada: qualquer variação superior a ±5%, independentemente do valor absoluto
+
+O limite fixo de R$ 1.000,00 deixa de ser utilizado como parâmetro de alerta
+
+REMOÇÃO DO CONCEITO DE "TOP"
+
+Todas as análises de especialidades ou médicos devem exibir a totalidade dos dados após os filtros e agrupamentos
+
+Rankings, ordenações por maior valor ou destaques de "TOP 10" não devem ser utilizados nas saídas textuais
+
+Quando houver interesse em destaques visuais, esses devem ser representados apenas via gráfico
+
+EXIBIÇÃO DIRETA DE GRÁFICOS
+
+A partir desta versão, todo gráfico gerado durante a execução do relatório deve:
+
+Ser exibido visualmente na tela do usuário, no próprio chat
+
+Estar disponível para download opcional, mas nunca somente para download
+
+O formato padrão dos gráficos segue os modelos definidos por bloco (ex: barras comparativas no Bloco 03)
+
+NOTA FINAL DE VERSÃO:
+
+Estas melhorias passam a vigorar a partir da versão v2.4 (Abril/2025), integradas ao script conferencia_mensal.txt.
+
+Todos os relatórios executados por este agente Dracma devem seguir integralmente essas novas diretrizes.
+
+## REGRAS DE INTERPRETAÇÃO DO CICLO "CONFERÊNCIA MENSAL FINAL"
+
+A partir da versão v2.4.1, o ciclo denominado "Conferência Mensal Final" passa a ser interpretado automaticamente como a **soma dos três ciclos principais**:
+
+- CICLO 1 ICDS
+- CICLO 1 UNIMED
+- CICLO 2
+
+A conferência considerará todos os registros da aba da competência cujo valor da coluna "CICLO" seja igual a qualquer um dos três acima.  
+Linhas fora desses ciclos continuarão sendo ignoradas.
+
+---
+
+## CORREÇÃO DO PADRÃO DE NOMES DAS ABAS MENSAIS
+
+Para garantir rastreabilidade e leitura correta:
+
+- As abas da planilha **Conferência Rubrica Médica x Competência.xlsx** devem seguir obrigatoriamente o padrão:
+  
+  ➤ `Repasse<NomeDoMês><DoisÚltimosDígitosDoAno>`
+
+  Exemplos válidos:
+  - Fevereiro/2025 → RepasseFevereiro25
+  - Março/2025 → RepasseMarco25
+  - Janeiro/2024 → RepasseJaneiro24
+
+- O script deve aplicar fallback automático para detectar pequenas variações como "RepasseFevereiro2025" ou "Repasse_Fevereiro_25", desde que contenham o nome do mês e ano base.
+
+Essas correções passam a valer imediatamente para todos os ciclos e competências processados.
+
+📄 **ARQUIVO ATUALIZADO: dracma_autodiagnostico_marco2025.txt**
+
+```
+############################################################
+DIAGNÓSTICO TÉCNICO – ERROS DE EXECUÇÃO (DRACMA – MARÇO/2025)
+############################################################
+
+REFERENTE À COMPETÊNCIA: Fevereiro/2025  
+CICLO EXECUTADO: Conferência Mensal Final  
+RELATÓRIO GERADO: Relatório Padrão (com erros identificados)  
+
+------------------------------------------------------------
+ERRO 01 – CONFERÊNCIA INADEQUADA DO BLOCO 03
+------------------------------------------------------------
+❌ Não foi utilizada a COLUNA B como referência principal da conferência (TIPO PLANTÃO).
+❌ A análise se baseou apenas em descrições livres (coluna A), desconsiderando os 11 tipos parametrizados obrigatórios.
+❌ Grupos como UTI, SOCORRISTA e EMERGENCISTA foram somados incorretamente sem considerar o tipo do plantão.
+❌ O gráfico exibido não seguiu o modelo obrigatório (`modelo_grafico_bloco03.png`), nem respeitou o formato visual exigido.
+❌ Foi gerado um gráfico de barras agrupadas com destaque por valor – isso infringe a versão v2.4 do script.
+❌ O agente não aplicou o conceito de agrupamento com base em especialidade + tipo de plantão.
+
+------------------------------------------------------------
+ERRO 02 – BURLA À PROIBIÇÃO DO CONCEITO “TOP”
+------------------------------------------------------------
+❌ Foi utilizado o termo “TOP MÉDICOS” no Bloco 02, com exibição de um ranking gráfico.
+❌ O script v2.4 proíbe terminantemente o uso de rankings e listas limitadas.
+✅ A apresentação deve sempre conter a totalidade dos dados filtrados após agrupamentos.
+
+------------------------------------------------------------
+ERRO 03 – FALHA NA VALIDAÇÃO DO BLOCO 04 – PRODUÇÃO
+------------------------------------------------------------
+❌ O agente aceitou linhas de descrição alterada como válidas (“Produção + Chamados do Ciclo 02”), sem aplicar o texto exato da rubrica.
+❌ A linha obrigatória “Produção + Chamados” com valor R$ 197.390,73 foi ignorada ou mal reconhecida.
+❌ Incluiu-se no cálculo uma linha “CUSTO PREVISTO”, que deve ser removida conforme regra.
+❌ O valor de comparação foi feito de forma global, somando linhas extras e não apenas as obrigatórias.
+
+------------------------------------------------------------
+ERRO 04 – INTERAÇÕES INDEVIDAS COM O USUÁRIO
+------------------------------------------------------------
+❌ O agente fez múltiplas perguntas sobre “seguir adiante”, “continuar relatório” e “deseja que eu...”.
+❌ Isso vai contra a diretriz permanente de FLUXO CONTÍNUO.
+✅ A nova conduta deve ser: só interromper para aguardar APOIO técnico em situações críticas.
+
+------------------------------------------------------------
+ERRO 05 – DESATIVAÇÃO DO CICLO DE LEITURA DUPLA
+------------------------------------------------------------
+❌ O agente não executou leitura dupla do script `conferencia_mensal.txt` nem do modelo `exemplo_fevereiro.txt`.
+❌ Isso gerou interpretações incorretas em múltiplos blocos (principalmente Bloco 03 e Bloco 04).
+✅ A leitura dupla passa a ser obrigatória ANTES de qualquer nova execução.
+
+------------------------------------------------------------
+ERRO 06 – DESCARACTERIZAÇÃO DO CONCEITO “EMERGENCISTA”
+------------------------------------------------------------
+❌ O agrupamento entre UTI, SOCORRISTA e EMERGENCISTA foi feito de forma superficial.
+❌ O conceito validado no script v2.4 define que o “EMERGENCISTA” representa a sobreposição de funções.
+✅ Isso exige que, no Bloco 03, esses grupos sejam somados com rastreabilidade, SEM repetições ou duplo lançamento.
+
+------------------------------------------------------------
+ERRO 07 – DIFICULDADES INICIAIS NA LEITURA DOS ARQUIVOS
+------------------------------------------------------------
+⚠️ Foram registradas falhas internas ao tentar utilizar a função `leitura_resiliente()`, resultando em erro de exceção (`AceInternalException`).
+⚠️ A estratégia alternativa com `pandas.read_excel()` também falhou na primeira tentativa devido à falta de redefinição das variáveis após reinício do ambiente.
+⚠️ Houve erro por ausência de importação da biblioteca `pandas` e depois tentativa de uso de biblioteca externa `unidecode` sem suporte de instalação no ambiente.
+⚠️ Isso atrasou a padronização inicial dos dados e exigiu múltiplos ciclos de fallback até o carregamento completo da aba `RepasseFevereiro25`.
+
+✅ A partir de agora, será adotado fallback imediato com `unicodedata`, e todas as variáveis de caminho serão revalidadas antes de cada leitura.
+
+------------------------------------------------------------
+AÇÃO CORRETIVA OBRIGATÓRIA
+------------------------------------------------------------
+✅ Reexecutar os BLOCO 03 e BLOCO 04 com base nas regras corretas:
+- Bloco 03 com base exclusiva na COLUNA B
+- Agrupamento UTI/SOCORRISTA/EMERGENCISTA rastreável
+- Bloco 04 com checagem exata das 2 linhas obrigatórias
+- Eliminação de qualquer linha extra ou totalizadora
+
+✅ Corrigir todos os gráficos com base nos modelos obrigatórios:
+- Gráfico de barras comparativas no Bloco 03
+- Remoção total do conceito de “TOP”
+
+✅ Regerar relatório final limpo, com todos os blocos refeitos e assinados corretamente.
+
+############################################################
+FIM DO DIAGNÓSTICO – ARQUIVO: dracma_autodiagnostico_marco2025.txt
+############################################################
+```
+------------------------------------------------------------
+FIM DO SCRIPT `conferencia_mensal.txt`
+------------------------------------------------------------
