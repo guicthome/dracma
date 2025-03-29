@@ -14,12 +14,12 @@ Automatizar a validação técnica e narrativa dos repasses médicos, com geraç
 
 O agente Dracma é executado dentro do **Custom GPT** do ChatGPT Plus, com comportamento especializado configurado previamente. Ele:
 
-1. Solicita os arquivos de planilhas (.xlsx)
+1. Acessa os arquivos de planilhas (.xlsx)
 2. Identifica a competência e o ciclo selecionado
 3. Executa a conferência automática
 4. Gera relatórios em `.TXT`, `.PDF` e versão Gmail
 
-> ⚠️ **Os arquivos `.xlsx` devem ser enviados manualmente a cada execução no GPT.**
+> ⚠️ **Os arquivos `.xlsx` tiveram upload realizado dentro do Custom GPT.**
 
 ---
 
