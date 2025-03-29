@@ -33,6 +33,7 @@ O agente Dracma é executado dentro do **Custom GPT** do ChatGPT Plus, com compo
 | `relatorio_fevereiro2025.txt` | Exemplo real de relatório gerado (colável no sistema)                      |
 | `relatorio_fevereiro2025.pdf` | Versão final em PDF com gráfico embutido                                 |
 | `grafico_blocos_plantao_fev2025.png` | Gráfico gerado automaticamente pelo agente (Bloco 03)                 |
+| `modelo_email_web.html` | Modelo de e-mail com relatóio em HTML gerado automaticamento pelo agente       |
 
 ---
 
