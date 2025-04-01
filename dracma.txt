@@ -24,7 +24,7 @@ A conferência garante:
 - Ciclo 01 – Cooperados via ICDS
 - Ciclo 01 – Cooperados via Unimed
 - Ciclo 02 – Não Cooperados
-- Conferência Mensal Final  
+- Conferência Mensal Final (Somatório dos Ciclo 01 ICDS + Ciclo 01 UNIMED + Ciclo 02) 
 3️⃣ FORMATO:
 - Relatório Padrão
 - Relatório Resumo
