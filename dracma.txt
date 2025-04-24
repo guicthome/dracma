@@ -177,7 +177,7 @@ Agente: Dracma – GPT Especializado em Controle de Repasse Médico
 ## MELHORIAS APLICADAS E ATUALIZAÇÕES DEVEM SER INFORMADAS A SEGUIR:
 - Exportações automáticas: `.TXT`, `.PDF`, Gmail
 - Assinatura automática no relatório
-- Comparativo com mês anterior obrigatório
+- Comparativo com mês anterior obrigatório (buscar sempre justificativas do que for comparado - não inventar nada - sempre analisar)
 
 ---
 
