@@ -1,0 +1,96 @@
+
+CONFERÊNCIA DE REPASSE MÉDICO – PADRÃO DE FORMATAÇÃO HTML (GMAIL)
+
+---
+
+🔹 Estrutura Geral:
+- Largura fixa: 600px.
+- Fundo externo: cinza claro (#f4f4f4).
+- Caixa principal centralizada (margin: auto).
+- Fonte: Tahoma, tamanho 14px.
+- Comunicação formal, limpa, institucional.
+
+---
+
+🔹 Cabeçalho:
+- Inserir logotipo AxiaCare no canto esquerdo superior:
+  https://i.imgur.com/yAUQciP.png
+- Inserir logotipo Unihealth no canto direito superior:
+  https://i.imgur.com/ac2rphe.png
+- Ambas as logos devem ter a mesma proporção (~50px de altura) e espaçamento igual.
+- Cor de fundo do cabeçalho: azul claro (#d9edf7).
+- Título principal centralizado, fonte bold e cor azul escuro (#196396).
+- Subtítulos: Competência, Data, Solicitante, Agente.
+
+---
+
+🔹 Conteúdo Principal:
+- Parágrafos <p> simples.
+- Títulos de blocos com <strong>, sem usar <h1>, <h2>, <h3>.
+- Separadores entre seções com <hr> finos e cor #ccc.
+- Área de conteúdo com fundo branco.
+
+---
+
+🔹 Gráfico de Tendência Comparativa:
+- Tipo: Gráfico de Linha (Line Chart).
+- Eixo X: Meses (ex.: Janeiro/25, Fevereiro/25, Março/25).
+- Eixo Y: Valor de repasse (R$).
+- Cada linha representa uma rubrica:
+  - Governança
+  - Salário Fixo
+  - Plantões
+  - Variável
+- Cada linha em cor diferente (padrão automático).
+- Deve ter ponto de marcador (marker='o') em cada mês.
+- Legenda obrigatória mostrando cada rubrica.
+- Título do gráfico: "Tendência Comparativa de Repasse por Rubrica".
+- Máxima largura do gráfico: 550px.
+- Fundo do gráfico: branco.
+
+---
+
+🔹 Box de Feedback e Dúvidas:
+- Caixa com borda azul claro (#d9edf7).
+- Texto interno:
+  "Clique aqui para inserir seu feedback ou tirar dúvidas sobre este relatório."
+- Caixa deve ser editável no Gmail.
+
+---
+
+🔹 Botão de Solicitação de Relatório PDF:
+- Texto: "Solicitar Relatório em PDF".
+- Cor de fundo do botão: azul institucional (#196396).
+- Cor do texto do botão: verde claro (#a6fb90).
+- Ação do botão:
+  mailto:guilherme@guithome.com.br?subject=Solicitação de Relatório PDF - Conferência Médica
+- Estilo: botão arredondado, padding interno, fonte bold.
+
+---
+
+🔹 Botão de Acesso à Planilha Completa:
+- Texto: "Acessar a Planilha Completa".
+- Cor de fundo: cinza escuro (#555555).
+- Cor do texto: branco (#FFFFFF).
+- Link de destino:
+  https://icdsgestaoemsaude-my.sharepoint.com/:x:/g/personal/guilherme_thome_unihealthgv_org_br/EdrcDtx_TVxNjO67-_6_toQByLaqlQ2KFwMhm-n_jAXH-g
+- Abertura do link: em nova aba (target="_blank").
+
+---
+
+🔹 Rodapé:
+- Fonte: Tahoma, tamanho 12px, cor cinza escuro.
+- Texto centralizado:
+  "Documento elaborado conforme metodologia institucional vigente. ICDS Unihealth – Governador Valadares."
+
+---
+
+🔹 Outras Normas Importantes:
+- Proibido usar <ul>, <ol>, <li>.
+- Estrutura toda colável direto no Gmail.
+- Compatível com dispositivos móveis (responsividade básica).
+- Cores padrão institucional, sem improvisação.
+
+---
+
+📌 Fim do Documento de Instruções
