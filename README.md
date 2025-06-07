@@ -33,7 +33,18 @@ O Dracma é um agente **Custom GPT** executado no ambiente **ChatGPT Plus**, com
 | `modelo_email_web.html`  | Modelo institucional em HTML para envio do relatório final por e-mail     |
 | `relatorios/`            | (Opcional) Diretório para armazenar exemplos de relatórios já gerados     |
 
+## 🚀 Uso do Script `generate_report.py`
+
+O módulo `generate_report.py` permite gerar o relatório manualmente fora do GPT.
+
+```bash
+python3 generate_report.py --competencia "Março/2025"
+```
+
+O comando lê `conferencia.xlsx`, aplica as regras do `dracma.txt` e cria os arquivos `relatorio.txt`, `relatorio.pdf` e `relatorio.html` na pasta atual.
+
 ---
+ 
 
 ## 📋 Instruções Complementares (Novo)
 
