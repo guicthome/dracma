@@ -1,0 +1,8 @@
+Bloco,Nome,Previsto,Executado
+1,Medico Missing,100,
+1,Medico Retroativo,100,250
+1,Medico Normal,100,105
+2,Medico Variation2,100,110
+3,Medico Variation3,200,188
+4,Medico Variation4,150,165
+4,Medico Normal4,150,150
