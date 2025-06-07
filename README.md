@@ -78,3 +78,13 @@ O relatório institucional é composto por 10 blocos fixos:
 
 Uso exclusivo do Hospital **ICDS Unihealth – Governador Valadares**.  
 É proibida a redistribuição externa sem autorização formal.
+
+## Running Tests
+
+This repository uses [PyTest](https://pytest.org) for the test suite. To run the tests, execute:
+
+```bash
+pytest
+```
+
+from the repository root. The tests use the sample spreadsheet located in `tests/data/sample_conferencia.xlsx`.
