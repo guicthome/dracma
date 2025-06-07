@@ -22,6 +22,16 @@ O Dracma é um agente **Custom GPT** executado no ambiente **ChatGPT Plus**, com
 4. O Dracma executa a validação técnica com base no script `dracma.txt` e nas instruções coladas
 5. O relatório é gerado em três formatos: `.txt`, `.pdf` (com gráficos), e `.html` institucional
 
+### 🚀 Uso pela linha de comando (MVP)
+
+Este repositório inclui um script em Python para gerar o relatório automaticamente.
+
+```bash
+python -m dracma.cli "Março/2025" --instructions "Foi pago um retroativo ao Dr. João" --output relatorio_marco25.txt
+```
+
+O comando acima lê `conferencia.xlsx`, aplica as regras de `dracma.txt` e cria o arquivo `relatorio_marco25.txt`.
+
 ---
 
 ## 📂 Estrutura dos Arquivos
