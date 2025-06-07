@@ -6,39 +6,50 @@ Este repositório contém os arquivos oficiais do agente **Dracma**, utilizado p
 
 ## 📌 Objetivo
 
-Automatizar a validação técnica e narrativa dos repasses médicos mensais, gerando relatórios padronizados por competência, conforme regras institucionais e estrutura fixa de análise.
+Automatizar a validação técnica e narrativa dos repasses médicos mensais, com geração de relatórios institucionais por competência. O agente segue uma estrutura padronizada de análise baseada em regras, blocos e validações.
 
 ---
 
-## 🧠 Funcionamento do Agente
+## 🧠 Como Funciona
 
-O Dracma é um GPT personalizado executado dentro do **ChatGPT Plus (Custom GPT)**, com comportamento ajustado às diretrizes da instituição.
+O Dracma é um agente **Custom GPT** executado no ambiente **ChatGPT Plus**, com comportamento especializado.
 
-### Fluxo Operacional:
+### 🔄 Fluxo de execução:
 
-1. O agente acessa a planilha `conferencia.xlsx`, hospedada neste repositório
-2. O usuário informa a competência a ser conferida (ex: Março/2025)
-3. A conferência é executada automaticamente conforme as regras do `dracma.txt`
-4. O agente gera um relatório completo com exportação para os formatos:
-   - `.TXT` colável
-   - `.PDF` com gráficos
-   - `.HTML` (modelo institucional)
+1. O usuário informa a competência (ex: Março/2025)
+2. O GPT acessa a planilha oficial `conferencia.xlsx`, hospedada neste repositório
+3. Caso existam instruções específicas da competência (ex: trechos de e-mail), o usuário pode **colar diretamente no GPT** antes da análise
+4. O Dracma executa a validação técnica com base no script `dracma.txt` e nas instruções coladas
+5. O relatório é gerado em três formatos: `.txt`, `.pdf` (com gráficos), e `.html` institucional
 
 ---
 
 ## 📂 Estrutura dos Arquivos
 
-| Arquivo                  | Descrição                                                                 |
-|--------------------------|--------------------------------------------------------------------------|
-| `dracma.txt`             | Script com todas as regras de conferência, estrutura dos blocos e narrativa |
-| `conferencia.xlsx`       | Planilha oficial com dados financeiros por competência                   |
-| `modelo_email_web.html`  | Modelo institucional em HTML para versão final do relatório por e-mail   |
+| Arquivo                  | Descrição                                                                  |
+|--------------------------|---------------------------------------------------------------------------|
+| `dracma.txt`             | Script com todas as regras de validação e lógica narrativa                |
+| `conferencia.xlsx`       | Planilha oficial com dados financeiros por competência                    |
+| `modelo_email_web.html`  | Modelo institucional em HTML para envio do relatório final por e-mail     |
+| `relatorios/`            | (Opcional) Diretório para armazenar exemplos de relatórios já gerados     |
+
+---
+
+## 📋 Instruções Complementares (Novo)
+
+A partir da versão **v3.0**, o agente Dracma permite o uso de **instruções adicionais coladas diretamente no chat** do GPT antes da conferência, tais como:
+
+- "Foi pago um retroativo para o Dr. João"
+- "Neste mês, o médico Fulano foi substituído pelo Sicrano"
+- "Não considerar o valor X, pois trata-se de glosa do mês anterior"
+
+Essas instruções são tratadas como **regras adicionais vinculadas à competência atual**, e influenciam diretamente a análise e o relatório gerado.
 
 ---
 
 ## 🧾 Estrutura do Relatório
 
-O relatório é sempre composto pelos seguintes blocos fixos:
+O relatório institucional é composto por 10 blocos fixos:
 
 1. Sumário Executivo  
 2. Metodologia  
@@ -56,23 +67,14 @@ O relatório é sempre composto pelos seguintes blocos fixos:
 ## ✅ Versão Atual
 
 - `v3.0 – Junho/2025`  
-- Nova estrutura: planilha hospedada no GitHub  
-- Modelo HTML institucional com gráficos interativos  
-- Exportações automáticas em `.TXT`, `.PDF` e `.HTML`
-
----
-
-## 🔄 Atualizações Esperadas
-
-Sempre que houver alteração nas regras, rubricas, layout ou narrativas, os seguintes arquivos devem ser atualizados:
-
-- `dracma.txt` (regras e estrutura narrativa)
-- `conferencia.xlsx` (dados de competência)
-- `modelo_email_web.html` (modelo visual)
+- Integração com instruções manuais coladas no GPT  
+- Planilha hospedada no GitHub  
+- Exportações automáticas `.TXT`, `.PDF`, `.HTML`  
+- Modelo de e-mail institucional atualizado
 
 ---
 
 ## 🔐 Licença
 
 Uso exclusivo do Hospital **ICDS Unihealth – Governador Valadares**.  
-Proibida a reprodução, redistribuição ou modificação externa sem autorização formal.
+É proibida a redistribuição externa sem autorização formal.
