@@ -1,52 +1,51 @@
 # 🩺 Dracma – Agente GPT para Conferência de Repasse Médico
 
-Este repositório contém o script oficial (`dracma.txt`) e os arquivos complementares do agente GPT **Dracma**, utilizado para realizar conferências mensais dos repasses médicos no Hospital **ICDS Unihealth – Governador Valadares**.
+Este repositório contém os arquivos oficiais do agente **Dracma**, utilizado para realizar a conferência mensal dos repasses médicos do Hospital **ICDS Unihealth – Governador Valadares**.
 
 ---
 
 ## 📌 Objetivo
 
-Automatizar a validação técnica e narrativa dos repasses médicos, com geração de relatórios padronizados por competência. O agente Dracma atua em conformidade com regras institucionais e estrutura por blocos de validação.
+Automatizar a validação técnica e narrativa dos repasses médicos mensais, gerando relatórios padronizados por competência, conforme regras institucionais e estrutura fixa de análise.
 
 ---
 
-## 🧠 Como Funciona o Agente Dracma (via ChatGPT Pro)
+## 🧠 Funcionamento do Agente
 
-O agente Dracma é executado dentro do **Custom GPT** do ChatGPT Plus, com comportamento especializado configurado previamente. Ele:
+O Dracma é um GPT personalizado executado dentro do **ChatGPT Plus (Custom GPT)**, com comportamento ajustado às diretrizes da instituição.
 
-1. Acessa os arquivos de planilhas (.xlsx)
-2. Identifica a competência e o ciclo selecionado
-3. Executa a conferência automática
-4. Gera relatórios em `.TXT`, `.PDF` e versão Gmail
+### Fluxo Operacional:
 
-> ⚠️ **Os arquivos `.xlsx` tiveram upload realizado dentro do Custom GPT.**
-
----
-
-## 📂 Estrutura dos Arquivos no Repositório
-
-| Arquivo                      | Descrição                                                                 |
-|-----------------------------|---------------------------------------------------------------------------|
-| `dracma.txt`                | Script unificado com regras de conferência, blocos, validações e narrativa |
-| `exemplo_fevereiro.txt`     | Modelo oficial de relatório estruturado usado como base                   |
-| `botao_gmail.html`          | Botão automático de envio do relatório via Gmail                          |
-| `relatorio_fevereiro2025.txt` | Exemplo real de relatório gerado (colável no sistema)                      |
-| `relatorio_fevereiro2025.pdf` | Versão final em PDF com gráfico embutido                                 |
-| `grafico_blocos_plantao_fev2025.png` | Gráfico gerado automaticamente pelo agente (Bloco 03)                 |
-| `modelo_email_web.html` | Modelo de e-mail com relatóio em HTML gerado automaticamento pelo agente       |
+1. O agente acessa a planilha `conferencia.xlsx`, hospedada neste repositório
+2. O usuário informa a competência a ser conferida (ex: Março/2025)
+3. A conferência é executada automaticamente conforme as regras do `dracma.txt`
+4. O agente gera um relatório completo com exportação para os formatos:
+   - `.TXT` colável
+   - `.PDF` com gráficos
+   - `.HTML` (modelo institucional)
 
 ---
 
-## 📊 Blocos de Validação
+## 📂 Estrutura dos Arquivos
 
-O relatório é dividido em 10 blocos obrigatórios:
+| Arquivo                  | Descrição                                                                 |
+|--------------------------|--------------------------------------------------------------------------|
+| `dracma.txt`             | Script com todas as regras de conferência, estrutura dos blocos e narrativa |
+| `conferencia.xlsx`       | Planilha oficial com dados financeiros por competência                   |
+| `modelo_email_web.html`  | Modelo institucional em HTML para versão final do relatório por e-mail   |
+
+---
+
+## 🧾 Estrutura do Relatório
+
+O relatório é sempre composto pelos seguintes blocos fixos:
 
 1. Sumário Executivo  
 2. Metodologia  
-3. Governança  
-4. Salário Fixo  
-5. Plantões  
-6. Produção  
+3. Bloco 01 – Governança  
+4. Bloco 02 – Salário Fixo  
+5. Bloco 03 – Plantões  
+6. Bloco 04 – Variável  
 7. Inconsistências e Tendências  
 8. Comparativo com Mês Anterior  
 9. Considerações Finais  
@@ -56,24 +55,24 @@ O relatório é dividido em 10 blocos obrigatórios:
 
 ## ✅ Versão Atual
 
-- `v2.4.1 – Março/2025`  
-- Compatível com Competências a partir de Janeiro/2025  
-- Validações ajustadas para margens relativas, agrupamentos por especialidade e retroativos
+- `v3.0 – Junho/2025`  
+- Nova estrutura: planilha hospedada no GitHub  
+- Modelo HTML institucional com gráficos interativos  
+- Exportações automáticas em `.TXT`, `.PDF` e `.HTML`
 
 ---
 
-## 📦 Uso Interno
+## 🔄 Atualizações Esperadas
 
-Este repositório é utilizado como fonte oficial pelo agente Dracma, e deve ser atualizado sempre que houver mudanças em:
+Sempre que houver alteração nas regras, rubricas, layout ou narrativas, os seguintes arquivos devem ser atualizados:
 
-- Lógica de conferência
-- Estrutura de rubrica
-- Blocos narrativos
-- Exportações e formatos
+- `dracma.txt` (regras e estrutura narrativa)
+- `conferencia.xlsx` (dados de competência)
+- `modelo_email_web.html` (modelo visual)
 
 ---
 
 ## 🔐 Licença
 
-Uso exclusivo interno do ICDS Unihealth – Governador Valadares.  
-Proibida a reprodução ou distribuição externa sem autorização.
+Uso exclusivo do Hospital **ICDS Unihealth – Governador Valadares**.  
+Proibida a reprodução, redistribuição ou modificação externa sem autorização formal.
